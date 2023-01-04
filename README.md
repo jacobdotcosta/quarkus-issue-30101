@@ -92,7 +92,7 @@ __  ____  __  _____   ___  __ ____  ______
 Cleanup the project.
 
 ```shell
-$ ./gradlew clean                                                                                                                                                       main 
+$ ./gradlew clean
 
 BUILD SUCCESSFUL in 864ms
 1 actionable task: 1 executed
@@ -135,9 +135,57 @@ Caused by: java.io.IOException: error=2, No such file or directory
 Install the snapshot version containing the fix on `maven local`.
 
 ```shell
-$ ./mvnw install -T8  -Dno-test-modules -DskipTests -DskipITs -pl '!test-framework'
+$ ./mvnw install -T0.6C  -Dno-test-modules -DskipTests -DskipITs
 ```
 
+Update this example to use the `999-SNAPSHOT` quarkus version which has been installed locally.
+
+Relaunch the tests.
+
+```shell
+$ ./gradlew -Dquarkus.package.type=native -Dquarkus.package.output-name=test -Dquarkus.package.add-runner-suffix=false build testNative
+
+...
+========================================================================================================================
+GraalVM Native Image: Generating 'test' (executable)...
+========================================================================================================================
+...
+Finished generating 'test' in 1m 41s.
+
+BUILD SUCCESSFUL in 2m 5s
+12 actionable tasks: 9 executed, 3 from cache
+
+````
+
+
+```shell
+$ ./gradlew -Dquarkus.package.type=native -Dquarkus.package.output-name=test clean build testNative
+
+...
+========================================================================================================================
+GraalVM Native Image: Generating 'test-runner' (executable)...
+========================================================================================================================
+...
+Finished generating 'test-runner' in 1m 45s.
+
+BUILD SUCCESSFUL in 2m 13s
+12 actionable tasks: 7 executed, 4 from cache, 1 up-to-date
+````
+
+
+```shell
+$ ./gradlew -Dquarkus.package.type=native clean build testNative
+
+...
+========================================================================================================================
+GraalVM Native Image: Generating 'quarkus-issue-30101-1.0.0-SNAPSHOT-runner' (executable)...
+========================================================================================================================
+...
+Finished generating 'quarkus-issue-30101-1.0.0-SNAPSHOT-runner' in 2m 1s.
+
+BUILD SUCCESSFUL in 2m 16s
+12 actionable tasks: 6 executed, 5 from cache, 1 up-to-date
+````
 
 ## Quarkus
 This project uses Quarkus, the Supersonic Subatomic Java Framework.
